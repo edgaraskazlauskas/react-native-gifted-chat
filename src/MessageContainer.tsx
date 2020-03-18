@@ -31,9 +31,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  contentContainerStyle: {
+  contentContainerStyleAlignTop: {
     flexGrow: 1,
     justifyContent: 'flex-start',
+  },
+  contentContainerStyle: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
   },
   emptyChatContainer: {
     flex: 1,
@@ -399,7 +403,7 @@ export default class MessageContainer<
           style={
             this.props.alignTop ? styles.listStyleAlignTop : styles.listStyle
           }
-          contentContainerStyle={styles.contentContainerStyle}
+          contentContainerStyle={this.props.alignTop ? styles.contentContainerStyleAlignTop : styles.contentContainerStyle}
           renderItem={this.renderRow}
           {...this.props.invertibleScrollViewProps}
           ListEmptyComponent={this.renderChatEmpty}
