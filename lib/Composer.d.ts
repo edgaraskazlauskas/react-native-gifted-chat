@@ -12,6 +12,8 @@ export interface ComposerProps {
     keyboardAppearance?: TextInputProps['keyboardAppearance'];
     multiline?: boolean;
     disableComposer?: boolean;
+    sendOnEnter?: boolean;
+    onSend?(): void;
     onTextChanged?(text: string): void;
     onInputSizeChanged?(contentSize: {
         width: number;
@@ -30,6 +32,8 @@ export default class Composer extends React.Component<ComposerProps> {
         textInputStyle: {};
         textInputAutoFocus: boolean;
         keyboardAppearance: string;
+        sendOnEnter: boolean;
+        onSend: () => void;
         onTextChanged: () => void;
         onInputSizeChanged: () => void;
     };
@@ -53,5 +57,6 @@ export default class Composer extends React.Component<ComposerProps> {
     };
     onContentSizeChange: (e: any) => void;
     onChangeText: (text: string) => void;
+    onKeyDown: (event: any) => void;
     render(): JSX.Element;
 }

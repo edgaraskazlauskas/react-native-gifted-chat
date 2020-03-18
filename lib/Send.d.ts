@@ -10,9 +10,7 @@ export interface SendProps {
     alwaysShowSend?: boolean;
     disabled?: boolean;
     sendButtonProps?: Partial<TouchableOpacityProps>;
-    onSend?({ text }: {
-        text: string;
-    }, b: boolean): void;
+    onSend?(): void;
 }
 export default class Send extends Component<SendProps> {
     static defaultProps: {

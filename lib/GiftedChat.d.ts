@@ -29,6 +29,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
     wrapInSafeArea?: boolean;
     scrollToBottom?: boolean;
     preventScrollToBottomOnUpdate?: boolean;
+    preventScrollToBottomOnLayout?: boolean;
     scrollToBottomStyle?: StyleProp<ViewStyle>;
     initialText?: string;
     placeholder?: string;
@@ -56,6 +57,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
     maxInputLength?: number;
     forceGetKeyboardHeight?: boolean;
     alwaysShowSend?: boolean;
+    sendOnEnter?: boolean;
     imageStyle?: StyleProp<ViewStyle>;
     extraData?: any;
     minComposerHeight?: number;
@@ -90,7 +92,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
     renderFooter?(): React.ReactNode;
     renderChatEmpty?(): React.ReactNode;
     renderChatFooter?(): React.ReactNode;
-    renderInputToolbar?(props: InputToolbar['props']): React.ReactNode;
+    renderInputToolbar?(props: InputToolbar<TMessage>['props']): React.ReactNode;
     renderComposer?(props: Composer['props']): React.ReactNode;
     renderActions?(props: Actions['props']): React.ReactNode;
     renderSend?(props: Send['props']): React.ReactNode;
@@ -136,6 +138,7 @@ declare class GiftedChat<TMessage extends IMessage = IMessage> extends React.Com
         renderLoadEarlier: null;
         renderAvatar: undefined;
         showUserAvatar: boolean;
+        sendOnEnter: boolean;
         scrollToBottomDelay: number;
         actionSheet: null;
         onPressAvatar: null;
@@ -172,6 +175,7 @@ declare class GiftedChat<TMessage extends IMessage = IMessage> extends React.Com
         minInputToolbarHeight: number;
         keyboardShouldPersistTaps: string;
         preventScrollToBottomOnUpdate: boolean;
+        preventScrollToBottomOnLayout: boolean;
         onInputTextChanged: null;
         maxInputLength: null;
         forceGetKeyboardHeight: boolean;
@@ -233,6 +237,7 @@ declare class GiftedChat<TMessage extends IMessage = IMessage> extends React.Com
         bottomOffset: PropTypes.Requireable<number>;
         minInputToolbarHeight: PropTypes.Requireable<number>;
         preventScrollToBottomOnUpdate: PropTypes.Requireable<boolean>;
+        preventScrollToBottomOnLayout: PropTypes.Requireable<boolean>;
         listViewProps: PropTypes.Requireable<object>;
         layoutListScrollToBottomDelay: PropTypes.Requireable<number>;
         keyboardShouldPersistTaps: PropTypes.Requireable<string>;
@@ -311,7 +316,7 @@ declare class GiftedChat<TMessage extends IMessage = IMessage> extends React.Com
     onKeyboardDidHide: (e: any) => void;
     scrollToBottom(animated?: boolean): void;
     renderMessages(): JSX.Element;
-    onSend: (messages?: TMessage[], shouldResetInputToolbar?: boolean) => void;
+    onSend: (messages?: Partial<TMessage> | Partial<TMessage>[], shouldResetInputToolbar?: boolean) => void;
     resetInputToolbar(): void;
     focusTextInput(): void;
     onInputSizeChanged: (size: {

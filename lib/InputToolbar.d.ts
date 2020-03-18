@@ -4,7 +4,11 @@ import { EmitterSubscription, StyleProp, ViewStyle } from 'react-native';
 import Composer from './Composer';
 import Send from './Send';
 import Actions from './Actions';
-export interface InputToolbarProps {
+import { IMessage } from './types';
+export interface InputToolbarProps<TMessage extends IMessage> {
+    text?: string;
+    onSend?: (message: Partial<TMessage>, resetInputToolbar?: boolean) => void;
+    sendOnEnter?: boolean;
     options?: {
         [key: string]: any;
     };
@@ -12,13 +16,13 @@ export interface InputToolbarProps {
     containerStyle?: StyleProp<ViewStyle>;
     primaryStyle?: StyleProp<ViewStyle>;
     accessoryStyle?: StyleProp<ViewStyle>;
-    renderAccessory?(props: InputToolbarProps): React.ReactNode;
+    renderAccessory?(props: InputToolbarProps<TMessage>): React.ReactNode;
     renderActions?(props: Actions['props']): React.ReactNode;
     renderSend?(props: Send['props']): React.ReactNode;
     renderComposer?(props: Composer['props']): React.ReactNode;
     onPressActionButton?(): void;
 }
-export default class InputToolbar extends React.Component<InputToolbarProps, {
+export default class InputToolbar<TMessage extends IMessage = IMessage> extends React.Component<InputToolbarProps<TMessage>, {
     position: string;
 }> {
     static defaultProps: {
@@ -51,6 +55,7 @@ export default class InputToolbar extends React.Component<InputToolbarProps, {
     keyboardWillShow: () => void;
     keyboardWillHide: () => void;
     renderActions(): {} | null | undefined;
+    handleSendRequested: () => void;
     renderSend(): {} | null | undefined;
     renderComposer(): {} | null | undefined;
     renderAccessory(): JSX.Element | null;
