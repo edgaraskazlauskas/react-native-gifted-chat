@@ -26,7 +26,6 @@ import TypingIndicator from './TypingIndicator'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
   },
   containerAlignTop: {
     flexDirection: 'row',
@@ -44,6 +43,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listStyle: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  listStyleAlignTop: {
     flex: 1,
   },
   scrollToBottomStyle: {
@@ -394,7 +397,9 @@ export default class MessageContainer<
           automaticallyAdjustContentInsets={false}
           inverted={inverted}
           data={this.props.messages}
-          style={styles.listStyle}
+          style={
+            this.props.alignTop ? styles.listStyleAlignTop : styles.listStyle
+          }
           contentContainerStyle={styles.contentContainerStyle}
           renderItem={this.renderRow}
           {...this.props.invertibleScrollViewProps}

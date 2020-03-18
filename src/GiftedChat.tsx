@@ -65,8 +65,10 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   wrapInSafeArea?: boolean
   /* enables the scrollToBottom Component */
   scrollToBottom?: boolean
-  /* enabled scroll to bottom on messages list update */
+  /* enables scroll to bottom on messages list update */
   preventScrollToBottomOnUpdate?: boolean
+  /* enables scroll to bottom on initial layout events */
+  preventScrollToBottomOnLayout?: boolean
   /* Scroll to bottom wrapper style */
   scrollToBottomStyle?: StyleProp<ViewStyle>
   initialText?: string
@@ -287,6 +289,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
       default: 'never',
     }),
     preventScrollToBottomOnUpdate: false,
+    preventScrollToBottomOnLayout: false,
     onInputTextChanged: null,
     maxInputLength: null,
     forceGetKeyboardHeight: false,
@@ -352,6 +355,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     bottomOffset: PropTypes.number,
     minInputToolbarHeight: PropTypes.number,
     preventScrollToBottomOnUpdate: PropTypes.bool,
+    preventScrollToBottomOnLayout: PropTypes.bool,
     listViewProps: PropTypes.object,
     layoutListScrollToBottomDelay: PropTypes.number,
     keyboardShouldPersistTaps: PropTypes.oneOf(['always', 'never', 'handled']),
