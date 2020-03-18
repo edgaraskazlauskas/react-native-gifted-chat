@@ -112,6 +112,7 @@ export default class Composer extends React.Component<ComposerProps> {
       !event.nativeEvent.shiftKey
     ) {
       this.props.onSend()
+      event.preventDefault();
     }
   }
 

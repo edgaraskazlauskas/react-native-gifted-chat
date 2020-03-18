@@ -36,10 +36,7 @@ const styles = StyleSheet.create({
 
 export interface InputToolbarProps<TMessage extends IMessage> {
   text?: string
-  onSend?: (
-    message: Partial<TMessage>,
-    resetInputToolbar?: boolean,
-  ) => void
+  onSend?: (message: Partial<TMessage>, resetInputToolbar?: boolean) => void
   sendOnEnter?: boolean
   options?: { [key: string]: any }
   optionTintColor?: string
@@ -140,24 +137,26 @@ export default class InputToolbar<
   }
 
   renderSend() {
-    if (this.props.renderSend) {
-      return this.props.renderSend({
-        ...this.props,
-        onSend: this.handleSendRequested,
-      })
+    const props = {
+      ...this.props,
+      onSend: this.handleSendRequested,
     }
-    return <Send {...this.props} onSend={this.handleSendRequested} />
+    if (this.props.renderSend) {
+      return this.props.renderSend(props)
+    }
+    return <Send {...props} />
   }
 
   renderComposer() {
+    const props = {
+      ...this.props,
+      onSend: this.handleSendRequested,
+    }
     if (this.props.renderComposer) {
-      return this.props.renderComposer({
-        ...this.props,
-        onSend: this.handleSendRequested,
-      })
+      return this.props.renderComposer(props)
     }
 
-    return <Composer {...this.props} onSend={this.handleSendRequested} />
+    return <Composer {...props} />
   }
 
   renderAccessory() {
