@@ -40,6 +40,8 @@ export interface ComposerProps {
   keyboardAppearance?: TextInputProps['keyboardAppearance']
   multiline?: boolean
   disableComposer?: boolean
+  sendOnEnter?: boolean
+  onSend?(): void
   onTextChanged?(text: string): void
   onInputSizeChanged?(contentSize: { width: number; height: number }): void
 }
@@ -56,6 +58,8 @@ export default class Composer extends React.Component<ComposerProps> {
     textInputStyle: {},
     textInputAutoFocus: false,
     keyboardAppearance: 'default',
+    sendOnEnter: false,
+    onSend: () => {},
     onTextChanged: () => {},
     onInputSizeChanged: () => {},
   }
@@ -98,6 +102,17 @@ export default class Composer extends React.Component<ComposerProps> {
 
   onChangeText = (text: string) => {
     this.props.onTextChanged!(text)
+  }
+
+  onKeyDown = (event: any) => {
+    if (
+      this.props.sendOnEnter &&
+      this.props.onSend &&
+      event.nativeEvent.key === 'Enter' &&
+      !event.nativeEvent.shiftKey
+    ) {
+      this.props.onSend()
+    }
   }
 
   render() {

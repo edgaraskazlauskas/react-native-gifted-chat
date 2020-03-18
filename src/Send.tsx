@@ -38,7 +38,7 @@ export interface SendProps {
   alwaysShowSend?: boolean
   disabled?: boolean
   sendButtonProps?: Partial<TouchableOpacityProps>
-  onSend?({ text }: { text: string }, b: boolean): void
+  onSend?(): void
 }
 
 export default class Send extends Component<SendProps> {
@@ -85,11 +85,7 @@ export default class Send extends Component<SendProps> {
           accessible
           accessibilityLabel='send'
           style={[styles.container, containerStyle]}
-          onPress={() => {
-            if (text && onSend) {
-              onSend({ text: text.trim() }, true)
-            }
-          }}
+          onPress={onSend}
           accessibilityTraits='button'
           disabled={disabled}
           {...sendButtonProps}

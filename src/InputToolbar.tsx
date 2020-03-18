@@ -14,6 +14,7 @@ import Composer from './Composer'
 import Send from './Send'
 import Actions from './Actions'
 import Color from './Color'
+import { IMessage } from './types'
 
 const styles = StyleSheet.create({
   container: {
@@ -33,23 +34,28 @@ const styles = StyleSheet.create({
   },
 })
 
-export interface InputToolbarProps {
+export interface InputToolbarProps<TMessage extends IMessage> {
+  text?: string
+  onSend?: (
+    message: Partial<TMessage>,
+    resetInputToolbar?: boolean,
+  ) => void
+  sendOnEnter?: boolean
   options?: { [key: string]: any }
   optionTintColor?: string
   containerStyle?: StyleProp<ViewStyle>
   primaryStyle?: StyleProp<ViewStyle>
   accessoryStyle?: StyleProp<ViewStyle>
-  renderAccessory?(props: InputToolbarProps): React.ReactNode
+  renderAccessory?(props: InputToolbarProps<TMessage>): React.ReactNode
   renderActions?(props: Actions['props']): React.ReactNode
   renderSend?(props: Send['props']): React.ReactNode
   renderComposer?(props: Composer['props']): React.ReactNode
   onPressActionButton?(): void
 }
 
-export default class InputToolbar extends React.Component<
-  InputToolbarProps,
-  { position: string }
-> {
+export default class InputToolbar<
+  TMessage extends IMessage = IMessage
+> extends React.Component<InputToolbarProps<TMessage>, { position: string }> {
   static defaultProps = {
     renderAccessory: null,
     renderActions: null,
@@ -125,19 +131,33 @@ export default class InputToolbar extends React.Component<
     return null
   }
 
+  handleSendRequested = () => {
+    const { text, onSend } = this.props
+    if (text && onSend) {
+      const message = { text: text.trim() }
+      onSend(message as TMessage, true)
+    }
+  }
+
   renderSend() {
     if (this.props.renderSend) {
-      return this.props.renderSend(this.props)
+      return this.props.renderSend({
+        ...this.props,
+        onSend: this.handleSendRequested,
+      })
     }
-    return <Send {...this.props} />
+    return <Send {...this.props} onSend={this.handleSendRequested} />
   }
 
   renderComposer() {
     if (this.props.renderComposer) {
-      return this.props.renderComposer(this.props)
+      return this.props.renderComposer({
+        ...this.props,
+        onSend: this.handleSendRequested,
+      })
     }
 
-    return <Composer {...this.props} />
+    return <Composer {...this.props} onSend={this.handleSendRequested} />
   }
 
   renderAccessory() {

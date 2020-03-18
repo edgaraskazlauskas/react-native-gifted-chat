@@ -121,6 +121,8 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   forceGetKeyboardHeight?: boolean
   /* Force send button */
   alwaysShowSend?: boolean
+  /* Enable send on enter unless shift key is pressed */
+  sendOnEnter?: boolean
   /* Image style */
   imageStyle?: StyleProp<ViewStyle>
   /* This can be used to pass any data which needs to be re-rendered */
@@ -186,7 +188,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   /* Custom component to render below the MessageContainer (separate from the ListView) */
   renderChatFooter?(): React.ReactNode
   /* Custom message composer container */
-  renderInputToolbar?(props: InputToolbar['props']): React.ReactNode
+  renderInputToolbar?(props: InputToolbar<TMessage>['props']): React.ReactNode
   /*  Custom text input message composer */
   renderComposer?(props: Composer['props']): React.ReactNode
   /* Custom action button on the left of the message composer */
@@ -249,6 +251,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     renderLoadEarlier: null,
     renderAvatar: undefined,
     showUserAvatar: false,
+    sendOnEnter: false,
     scrollToBottomDelay: 200,
     actionSheet: null,
     onPressAvatar: null,
@@ -452,7 +455,12 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
   }
 
   componentDidUpdate(prevProps: GiftedChatProps<TMessage> = {}) {
-    const { messages, text, inverted, preventScrollToBottomOnUpdate } = this.props
+    const {
+      messages,
+      text,
+      inverted,
+      preventScrollToBottomOnUpdate,
+    } = this.props
 
     if (this.props !== prevProps) {
       this.setMessages(messages || [])
@@ -696,7 +704,10 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     )
   }
 
-  onSend = (messages: TMessage[] = [], shouldResetInputToolbar = false) => {
+  onSend = (
+    messages: Array<Partial<TMessage>> | Partial<TMessage> = [],
+    shouldResetInputToolbar = false,
+  ) => {
     if (!Array.isArray(messages)) {
       messages = [messages]
     }
@@ -706,7 +717,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
         user: this.props.user!,
         createdAt: new Date(),
         _id: this.props.messageIdGenerator && this.props.messageIdGenerator(),
-      }
+      } as TMessage;
     })
 
     if (shouldResetInputToolbar === true) {
@@ -838,7 +849,7 @@ class GiftedChat<TMessage extends IMessage = IMessage> extends React.Component<
     if (this.props.renderInputToolbar) {
       return this.props.renderInputToolbar(inputToolbarProps)
     }
-    return <InputToolbar {...inputToolbarProps} />
+    return <InputToolbar<TMessage> {...inputToolbarProps} />
   }
 
   renderChatFooter() {
