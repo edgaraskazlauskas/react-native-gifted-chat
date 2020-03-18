@@ -129,6 +129,7 @@ export default class Composer extends React.Component<ComposerProps> {
         onChange={this.onContentSizeChange}
         onContentSizeChange={this.onContentSizeChange}
         onChangeText={this.onChangeText}
+        onKeyPress={this.onKeyDown}
         style={[
           styles.textInput,
           this.props.textInputStyle,

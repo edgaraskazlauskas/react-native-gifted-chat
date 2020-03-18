@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
   },
   listStyle: {
     flex: 1,
-    justifyContent: 'flex-end',
   },
   listStyleAlignTop: {
     flex: 1,
