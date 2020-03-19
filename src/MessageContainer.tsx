@@ -31,13 +31,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  contentContainerStyleAlignTop: {
-    flexGrow: 1,
-    justifyContent: 'flex-start',
-  },
   contentContainerStyle: {
     flexGrow: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   emptyChatContainer: {
     flex: 1,
@@ -47,9 +43,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listStyle: {
-    flex: 1,
-  },
-  listStyleAlignTop: {
     flex: 1,
   },
   scrollToBottomStyle: {
@@ -93,6 +86,7 @@ export interface MessageContainerProps<TMessage extends IMessage> {
   renderLoadEarlier?(props: LoadEarlier['props']): React.ReactNode
   scrollToBottomComponent?(): React.ReactNode
   onLoadEarlier?(): void
+  onLayoutScrolledToBottom?(): void
   onQuickReply?(replies: Reply[]): void
 }
 
@@ -111,6 +105,7 @@ export default class MessageContainer<
     renderFooter: null,
     renderMessage: null,
     onLoadEarlier: () => {},
+    onLayoutScrolledToBottom: () => {},
     onQuickReply: () => {},
     inverted: true,
     loadEarlier: false,
@@ -133,6 +128,7 @@ export default class MessageContainer<
     renderMessage: PropTypes.func,
     renderLoadEarlier: PropTypes.func,
     onLoadEarlier: PropTypes.func,
+    onLayoutScrolledToBottom: PropTypes.func,
     listViewProps: PropTypes.object,
     inverted: PropTypes.bool,
     loadEarlier: PropTypes.bool,
@@ -372,10 +368,12 @@ export default class MessageContainer<
         this.props.layoutListScrollToBottomDelay ||
         estimatedMessageRenderTime * this.props.messages!.length
 
-      setTimeout(
-        () => this.scrollToBottom && this.scrollToBottom(false),
-        scrollDelay,
-      )
+      setTimeout(() => {
+        this.scrollToBottom(false)
+        if (this.props.onLayoutScrolledToBottom) {
+          this.props.onLayoutScrolledToBottom()
+        }
+      }, scrollDelay)
     }
   }
 
@@ -400,10 +398,8 @@ export default class MessageContainer<
           automaticallyAdjustContentInsets={false}
           inverted={inverted}
           data={this.props.messages}
-          style={
-            this.props.alignTop ? styles.listStyleAlignTop : styles.listStyle
-          }
-          contentContainerStyle={this.props.alignTop ? styles.contentContainerStyleAlignTop : styles.contentContainerStyle}
+          style={styles.listStyle}
+          contentContainerStyle={styles.contentContainerStyle}
           renderItem={this.renderRow}
           {...this.props.invertibleScrollViewProps}
           ListEmptyComponent={this.renderChatEmpty}
