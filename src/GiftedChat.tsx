@@ -201,6 +201,8 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
   onPressActionButton?(): void
   /* Callback when the input text changes */
   onInputTextChanged?(text: string): void
+  /* Callback when list scrolls to bottom on layout effects */
+  onLayoutScrolledToBottom?(): void
   /* Custom parse patterns for react-native-parsed-text used to linking message content (like URLs and phone numbers) */
   parsePatterns?(linkStyle: TextStyle): any
   onQuickReply?(replies: Reply[]): void

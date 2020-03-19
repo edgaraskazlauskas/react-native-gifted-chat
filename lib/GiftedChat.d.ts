@@ -99,6 +99,7 @@ export interface GiftedChatProps<TMessage extends IMessage = IMessage> {
     renderAccessory?(props: InputToolbar['props']): React.ReactNode;
     onPressActionButton?(): void;
     onInputTextChanged?(text: string): void;
+    onLayoutScrolledToBottom?(): void;
     parsePatterns?(linkStyle: TextStyle): any;
     onQuickReply?(replies: Reply[]): void;
     renderQuickReplies?(quickReplies: QuickReplies['props']): React.ReactNode;
