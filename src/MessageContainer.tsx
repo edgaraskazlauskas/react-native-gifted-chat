@@ -79,6 +79,7 @@ export interface MessageContainerProps<TMessage extends IMessage> {
   scrollToBottom?: boolean
   preventScrollToBottomOnLayout?: boolean
   scrollToBottomStyle?: StyleProp<ViewStyle>
+  headerWrapperStyle?: StyleProp<ViewStyle>
   invertibleScrollViewProps?: any
   extraData?: any
   scrollToBottomOffset?: number
@@ -120,6 +121,7 @@ export default class MessageContainer<
     scrollToBottomOffset: 200,
     alignTop: false,
     scrollToBottomStyle: {},
+    headerWrapperStyle: {},
     preventScrollToBottomOnLayout: false,
   }
 
@@ -333,7 +335,7 @@ export default class MessageContainer<
   }
 
   renderHeaderWrapper = () => (
-    <View style={styles.headerWrapper}>{this.renderLoadEarlier()}</View>
+    <View style={[styles.headerWrapper, this.props.headerWrapperStyle]}>{this.renderLoadEarlier()}</View>
   )
 
   renderScrollBottomComponent() {
@@ -403,7 +405,11 @@ export default class MessageContainer<
           inverted={inverted}
           data={this.props.messages}
           style={styles.listStyle}
-          contentContainerStyle={this.props.alignTop ? styles.contentContainerStyleAlignTop : styles.contentContainerStyle}
+          contentContainerStyle={
+            this.props.alignTop
+              ? styles.contentContainerStyleAlignTop
+              : styles.contentContainerStyle
+          }
           renderItem={this.renderRow}
           {...this.props.invertibleScrollViewProps}
           ListEmptyComponent={this.renderChatEmpty}

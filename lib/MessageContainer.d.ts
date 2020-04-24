@@ -15,6 +15,7 @@ export interface MessageContainerProps<TMessage extends IMessage> {
     scrollToBottom?: boolean;
     preventScrollToBottomOnLayout?: boolean;
     scrollToBottomStyle?: StyleProp<ViewStyle>;
+    headerWrapperStyle?: StyleProp<ViewStyle>;
     invertibleScrollViewProps?: any;
     extraData?: any;
     scrollToBottomOffset?: number;
@@ -52,6 +53,7 @@ export default class MessageContainer<TMessage extends IMessage = IMessage> exte
         scrollToBottomOffset: number;
         alignTop: boolean;
         scrollToBottomStyle: {};
+        headerWrapperStyle: {};
         preventScrollToBottomOnLayout: boolean;
     };
     static propTypes: {
